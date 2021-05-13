@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+
+<body>
+  <div class="city">
+  <img id="image1" src="image1.jpg" onload='javascript:' />
+  </div>
+  <script>
+
+    let c = document.createElement("canvas");
+    ctx = c.getContext('2d');
+    sample_size = 281
+
+    let img1 = new Image();
+    img1.crossOrigin = "Anonymous";
+    img1.setAttribute('crossOrigin', '');
+
+    img1.onload = function () {
+      //pixelator();
+      setTimeout(pixelator, 50);
+      //setTimeout(pixelator, 50);
+      //setTimeout(pixelator, 50);
+      //setTimeout(pixelator, 50);
+      //setTimeout(pixelator, 50);
+      //for (let i = 0; i < 6; i += 1) {
+        //setTimeout(pixelator, 350);
+      //};
+    };
+
+    img1.src = document.getElementById("image1").src;
+
+    function pixelator() {
+      document.getElementById("image1").remove();
+
+      w = img1.width;
+      h = img1.height;
+
+      c.width = w;
+      c.height = h;
+      ctx.drawImage(img1, 0, 0);
+
+      var pixelArr = ctx.getImageData(0, 0, w, h).data;
+
+      sample_size -= 40;
+
+      for (let y = 0; y < h; y += sample_size) {
+        for (let x = 0; x < w; x += sample_size) {
+          let p = (x + (y * w)) * 4;
+          ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
+          ctx.fillRect(x, y, sample_size, sample_size);
+        }
+      }
+
+      let img2 = new Image();
+      img2.crossOrigin = "Anonymous";
+      img2.setAttribute('crossOrigin', '');
+      img2.src = c.toDataURL("image/jpeg");
+      img2.width = 800;
+      img2.id = "image1"
+
+      //document.body.appendChild(img2);
+      document.querySelector(".city").appendChild(img2);
+
+      console.log(sample_size);
+      img1.src = document.getElementById("image1").src;
+    };
+
+  </script>
+</body>
+
+</html>
