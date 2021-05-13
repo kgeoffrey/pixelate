@@ -12,6 +12,7 @@ img1.onload = function () {
     setIntervalX(pixelator, 75, frames-2) //35
 };
 
+
 img1.src = document.getElementById("image1").src;
 
 function pixelator() {
