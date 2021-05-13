@@ -4,14 +4,83 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="CSS/styles.css" />
+  <link rel="preload" href="images/image1.jpg" as="image" imagesrcset="images/image1.jpg">
+  <link rel="preload" href="js/pixelate.js" as="script">
 </head>
 
-<body>
-<div class="city">
-  <img id="image1" src="images/image1.jpg" />
-</div>
-<script type="text/javascript" src="js/pixelate.js"></script>
+<script type='text/javascript'>
+  // add all of your image paths to this array
+  let c = document.createElement("canvas");
+  ctx = c.getContext('2d');
 
+  frames = 20 //70
+  pixel_size = 1
+  let sample_size = pixel_size * frames + 1
+  let img1 = new Image();
+
+  img1.onload = function () {
+    console.log('loading pics...')
+    pixelator();
+    setIntervalX(pixelator, 95, frames - 2) //35
+    window.location = './home.html';
+  };
+
+  img1.src = 'images/image1.jpg';
+
+  //window.location = './home.html';
+
+  function pixelator() {
+    sample_size -= pixel_size;
+
+    let w = img1.width;
+    let h = img1.height;
+    c.width = w;
+    c.height = h;
+    ctx.drawImage(img1, 0, 0);
+
+    var pixelArr = ctx.getImageData(0, 0, w, h).data;
+
+    for (let y = 0; y < h; y += sample_size) {
+      for (let x = 0; x < w; x += sample_size) {
+        let p = (x + (y * w)) * 4;
+        ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
+        ctx.fillRect(x, y, sample_size, sample_size);
+      }
+    }
+    console.log(sample_size);
+
+    //return c.toDataURL();
+    document.getElementById("image1").remove();
+    let img2 = new Image();
+    img2.crossOrigin = "Anonymous";
+    img2.setAttribute('crossOrigin', '');
+    img2.src = c.toDataURL("images/image1.jpeg");
+    img2.width = 400;
+    img2.id = "image1"
+
+    document.querySelector(".city").appendChild(img2);
+  }
+
+  function setIntervalX(callback, delay, repetitions) {
+    var x = 0;
+    var intervalID = window.setInterval(function () {
+
+      callback();
+
+      if (++x === repetitions) {
+        window.clearInterval(intervalID);
+      }
+    }, delay);
+  }
+  //window.location = './home.html';
+
+</script>
+<body>
+<h1>Loading....</h1>
+<img src="./images/loading.gif"/>
+<div class="city" style="display: none;">
+  <img rel="preload" as="image" id="image1" src="images/image1.jpg" srcset="images/image1.jpg" />
+</div>
 </body>
 
 </html>

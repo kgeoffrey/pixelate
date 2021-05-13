@@ -1,18 +1,22 @@
+
+
 let c = document.createElement("canvas");
 ctx = c.getContext('2d');
 
-frames = 30 //70
+frames = 20 //70
 pixel_size = 1
 let sample_size = pixel_size * frames + 1
 let img1 = new Image();
+//img1.src = document.getElementById("image1").src;
 
 img1.onload = function () {
     pixelator();
-    setIntervalX(pixelator, 95, frames-2) //35
+    setIntervalX(pixelator, 95, frames - 2) //35
 };
 
-
 img1.src = document.getElementById("image1").src;
+
+//img1.src = document.getElementById("image1").src;
 
 function pixelator() {
     sample_size -= pixel_size;
